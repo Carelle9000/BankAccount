@@ -23,17 +23,17 @@ public class BankAccountService {
         return repository.findById(id);
     }
 
-    public BankAccount createAccount(BankAccount account) {
-        return repository.save(account);
+    public void createAccount(BankAccount account) {
+        repository.save(account);
     }
 
-    public BankAccount updateAccount(Long id, BankAccount accountDetails) {
+    public void updateAccount(Long id, BankAccount updatedAccount) {
         BankAccount account = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-        account.setFirstName(accountDetails.getFirstName());
-        account.setLastName(accountDetails.getLastName());
-        account.setEmail(accountDetails.getEmail());
-        return repository.save(account);
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+        account.setFirstName(updatedAccount.getFirstName());
+        account.setLastName(updatedAccount.getLastName());
+        account.setEmail(updatedAccount.getEmail());
+        repository.save(account);
     }
 
     public void deleteAccount(Long id) {
@@ -41,39 +41,42 @@ public class BankAccountService {
     }
 
     @Transactional
-    public BankAccount deposit(Long id, double amount) {
+    public void deposit(Long id, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive");
         }
         BankAccount account = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
         account.setBalance(account.getBalance() + amount);
-        return repository.save(account);
+        repository.save(account);
     }
 
     @Transactional
-    public BankAccount withdraw(Long id, double amount) {
+    public void withdraw(Long id, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Withdrawal amount must be positive");
         }
         BankAccount account = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
         if (account.getBalance() < amount) {
             throw new IllegalArgumentException("Insufficient balance");
         }
         account.setBalance(account.getBalance() - amount);
-        return repository.save(account);
+        repository.save(account);
     }
 
     @Transactional
-    public void transfer(Long fromId, Long toId, double amount) {
+    public void transfer(Long id, Long toId, double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Transfer amount must be positive");
         }
-        BankAccount fromAccount = repository.findById(fromId)
-                .orElseThrow(() -> new RuntimeException("Source account not found"));
+        if (id.equals(toId)) {
+            throw new IllegalArgumentException("Source and destination accounts must be different");
+        }
+        BankAccount fromAccount = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
         BankAccount toAccount = repository.findById(toId)
-                .orElseThrow(() -> new RuntimeException("Destination account not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Destination account not found"));
         if (fromAccount.getBalance() < amount) {
             throw new IllegalArgumentException("Insufficient balance in source account");
         }

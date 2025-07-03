@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-neon {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .btn-neon:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            transform: translateY(-2px);
+        }
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<div class="container mx-auto p-6 max-w-lg">
+    <h1 class="text-3xl font-bold text-red-400 mb-6">An Error Occurred</h1>
+    <p class="error mb-4" th:text="${errorMessage}"></p>
+    <a th:href="@{/accounts}" class="btn-neon bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500">Back to Accounts</a>
+</div>
+</body>
+</html>
