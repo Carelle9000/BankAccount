@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Accounts</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-neon {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .btn-neon:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            transform: translateY(-2px);
+        }
+        .table-row:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        th, td {
+            border-color: #4a5568;
+        }
+        .icon-action {
+            transition: color 0.3s ease;
+        }
+        .icon-action:hover {
+            transform: scale(1.2);
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: #e2e8f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-blue-400 mb-6">Bank Accounts</h1>
+
+    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow-lg">
+        <table class="min-w-full">
+            <thead class="bg-gray-900">
+            <tr>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">ID</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">Account Number</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">First Name</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">Last Name</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">Email</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">Balance</th>
+                <th class="py-3 px-6 text-left text-blue-300 font-semibold">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account : ${accounts}" class="table-row">
+                <td class="border-t py-4 px-6" th:text="${account.id}"></td>
+                <td class="border-t py-4 px-6" th:text="${account.accountNumber}"></td>
+                <td class="border-t py-4 px-6" th:text="${account.firstName}"></td>
+                <td class="border-t py-4 px-6" th:text="${account.lastName}"></td>
+                <td class="border-t py-4 px-6" th:text="${account.email}"></td>
+                <td class="border-t py-4 px-6" th:text="${account.balance}"></td>
+                <td class="border-t py-4 px-6 flex space-x-3">
+                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}" class="icon-action text-blue-400 tooltip" data-tooltip="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}" class="icon-action text-red-400 tooltip" data-tooltip="Delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    <a th:href="@{/accounts/deposit/{id}(id=${account.id})}" class="icon-action text-green-400 tooltip" data-tooltip="Deposit">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                    <a th:href="@{/accounts/withdraw/{id}(id=${account.id})}" class="icon-action text-yellow-400 tooltip" data-tooltip="Withdraw">
+                        <i class="fas fa-minus-circle"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex space-x-4 mt-6">
+        <a th:href="@{/accounts/new}" class="btn-neon bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500">Create New Account</a>
+        <a th:href="@{/accounts/transfer}" class="btn-neon bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500">Transfer Money</a>
+    </div>
+</div>
+</body>
+</html>
